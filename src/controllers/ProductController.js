@@ -1,4 +1,6 @@
+const fs = require('fs').promises;
 const Product = require('../models/Product');
+const path = require('path');
 
 // return all products
 async function index(req, res) {
@@ -15,7 +17,7 @@ async function show(req, res) {
   try {
     const product = await Product.findById(req.params.id);
     res.json(product);
-  } catch (error) {
+  } catch (err) {
     res.status(500).send({ message: err.message });
   }
 }
@@ -36,7 +38,7 @@ async function store(req, res) {
     res.json({
       status:"Product created"
     })
-  } catch (error) {
+  } catch (err) {
     res.status(500).send({ message: err.message });
   }
 }
@@ -44,13 +46,23 @@ async function store(req, res) {
 // update product by id
 async function update(req, res) {
   try {
-    const { title, size, unitaryPrice, description, imgUrl } = req.body;
-    const newProduct = { title, size, unitaryPrice, description, imgUrl };
-    await Product.findByIdAndUpdate(req.params.id, newProduct);
-    res.json({
-      status:"Product updated"
-    })
-  } catch (error) {
+    const { title, size, unitaryPrice, description } = req.body;
+    const updateProduct = { title, size, unitaryPrice, description };
+    const product = await Product.findByIdAndUpdate(req.params.id, updateProduct);
+
+    if (req.file) {
+
+      const image = product.imgUrl.split('/');
+      await fs.unlink(path.join(__dirname + `/../storage/img/${image[image.length-1]}`))
+
+      const { filename } = req.file;
+      product.setImgUrl(filename);
+
+      await Product.findByIdAndUpdate(req.params.id, product);
+    }
+
+    res.json({ status:"Product updated" });
+  } catch (err) {
     res.status(500).send({ message: err.message });
   }
 }
@@ -58,11 +70,14 @@ async function update(req, res) {
 // delete product by id
 async function destroy(req, res) {
   try {
-    await Product.findByIdAndRemove(req.params.id);
+    const product = await Product.findByIdAndRemove(req.params.id);
+    const image = product.imgUrl.split('/');
+    await fs.unlink(path.join(__dirname + `/../storage/img/${image[image.length-1]}`))
     res.json({
       status:"Product deleted"
     })
-  } catch (error) {
+
+  } catch (err) {
     res.status(500).send({ message: err.message });
   }
 }

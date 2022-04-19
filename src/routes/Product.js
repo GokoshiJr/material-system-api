@@ -13,7 +13,7 @@ router.get('/:id', show);
 router.post('/', upload.single('image'), store);
 
 // update product by id
-router.put('/:id', update);
+router.put('/:id', upload.single('image'), update);
 
 // delete product by id
 router.delete('/:id', destroy);

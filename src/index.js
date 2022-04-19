@@ -17,7 +17,7 @@ app.use('/api/product', require('./routes/Product'));
 
 async function initApp({ port=3000 }, dbConfig) {
   try {
-    await connectDb(dbConfig, srv=true);
+    await connectDb(dbConfig, true);
     app.listen(port, () => {
       console.log(`Server on port ${port}`);
     })
