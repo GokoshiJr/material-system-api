@@ -1,18 +1,30 @@
+const cors = require('cors');
 const express = require('express');
 const morgan = require('morgan');
-const { mongoose } = require('./database/db');
+const connectDb = require('./database/mongodb');
+const { appConfig, dbConfig } = require('./config');
 const app = express();
-
-// settings
-app.set('port', process.env.PORT || 3000);
 
 // middlewares
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use('/public', express.static(`${__dirname}/storage/img/`));
+app.use(cors()); // para que responda peticiones desde otros hosts
 
 // routes
-app.use('/api/todo', require('./routes/todoController'));
+app.use('/api/product', require('./routes/Product'));
 
-app.listen(app.get('port'), () => {
-  console.log(`Server on port ${app.get('port')}`);
-})
+async function initApp({ port=3000 }, dbConfig) {
+  try {
+    await connectDb(dbConfig, srv=true);
+    app.listen(port, () => {
+      console.log(`Server on port ${port}`);
+    })
+  } catch (error) {
+    console.error(error);
+    process.exit(0);
+  }
+}
+
+initApp(appConfig, dbConfig);
