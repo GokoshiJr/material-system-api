@@ -26,18 +26,13 @@ async function show(req, res) {
 async function store(req, res) {
   try {
     const { title, size, unitaryPrice, description, imgUrl } = req.body;
-
     const product = new Product({title, size, unitaryPrice, imgUrl, description});
-
     if (req.file) {
       const { filename } = req.file;
       product.setImgUrl(filename)
     }
-
     await product.save();
-    res.json({
-      status:"Product created"
-    })
+    res.json({ status:"Product created" });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
@@ -49,18 +44,15 @@ async function update(req, res) {
     const { title, size, unitaryPrice, description } = req.body;
     const updateProduct = { title, size, unitaryPrice, description };
     const product = await Product.findByIdAndUpdate(req.params.id, updateProduct);
-
     if (req.file) {
-
+      // si envian una img nueva, eliminamos la nueva
       const image = product.imgUrl.split('/');
-      await fs.unlink(path.join(__dirname + `/../storage/img/${image[image.length-1]}`))
-
+      await fs.unlink(path.join(__dirname + `/../storage/img/${image[image.length-1]}`));
+      // guardamos la nueva y seteamos la url
       const { filename } = req.file;
       product.setImgUrl(filename);
-
       await Product.findByIdAndUpdate(req.params.id, product);
     }
-
     res.json({ status:"Product updated" });
   } catch (err) {
     res.status(500).send({ message: err.message });
@@ -73,10 +65,7 @@ async function destroy(req, res) {
     const product = await Product.findByIdAndRemove(req.params.id);
     const image = product.imgUrl.split('/');
     await fs.unlink(path.join(__dirname + `/../storage/img/${image[image.length-1]}`))
-    res.json({
-      status:"Product deleted"
-    })
-
+    res.json({ status:"Product deleted" });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
