@@ -3,13 +3,28 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const ProductSchema = new Schema({
-  title: {type: String, required: true},
-  size: {type: Number, required: true},
-  unitaryPrice: {type: Number, required: true},
-  imgUrl: {type: String},
-  description: {type: String, required: true}
+  title: {
+    type: String,
+    required: true
+  },
+  size: {
+    type: Number,
+    required: true
+  },
+  unitaryPrice: {
+    type: Number,
+    required: true
+  },
+  imgUrl: {
+    type: String
+  },
+  description: {
+    type: String,
+    required: true
+  }
 }, {
-  timestamps: true
+  timestamps: true,
+  versionKey: false
 });
 
 // metodo para setear la url de la imagen guardada en el servidor
