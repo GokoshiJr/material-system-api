@@ -1,7 +1,7 @@
 const upload = require('../libs/storage'); // multer permite recibir req desde form-data
 const express = require('express');
 const router = express.Router();
-const { index, show, store, update, destroy } = require('../controllers/ProductController');
+const { index, show, store, update, destroy } = require('../controllers/productController');
 
 // return all products
 router.get('/', index);
