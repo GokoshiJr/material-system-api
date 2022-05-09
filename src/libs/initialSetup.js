@@ -8,8 +8,7 @@ const createRoles = async () => {
       new Role({name: 'user'}).save(),
       new Role({name: 'moderator'}).save(),
       new Role({name: 'admin'}).save()
-    ])
-    console.log(values);
+    ]);
   } catch (err) {
     console.log(err);
   }
