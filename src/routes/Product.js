@@ -1,3 +1,4 @@
+const { verifyToken, isAdmin, isModerator } = require('../middlewares/authJwt')
 const upload = require('../libs/storage'); // multer permite recibir req desde form-data
 const express = require('express');
 const router = express.Router();
@@ -10,12 +11,12 @@ router.get('/', index);
 router.get('/:id', show);
 
 // create product, upload.single('image') puede recibir una img llamada image
-router.post('/', upload.single('image'), store);
+router.post('/', [verifyToken, isModerator, upload.single('image')], store);
 
 // update product by id, upload.single('image') puede recibir una img llamada image
-router.put('/:id', upload.single('image'), update);
+router.put('/:id', [verifyToken, isAdmin, upload.single('image')], update);
 
 // delete product by id
-router.delete('/:id', destroy);
+router.delete('/:id', [verifyToken, isAdmin], destroy);
 
 module.exports = router;
