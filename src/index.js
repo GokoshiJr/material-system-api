@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { createRoles } = require('./libs/initialSetup')
 const cors = require('cors');
 const express = require('express');
@@ -17,10 +18,12 @@ app.use(cors()); // para que responda peticiones desde otros hosts
 // routes
 app.use('/api/product', require('./routes/product'));
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/user', require('./routes/user'));
 
-async function initApp({ port=3000 }, dbConfig) {
+async function initApp({ port=4000 }, dbConfig) {
   try {
-    await connectDb(dbConfig, true);
+    // srv in false, to connect local db
+    await connectDb(dbConfig, false);
     createRoles();
     app.listen(port, () => {
       console.log(`Server on port ${port}`);
