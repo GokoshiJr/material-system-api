@@ -1,5 +1,24 @@
 const User = require('../models/User');
 const Role = require('../models/Role');
+const jwt = require('jsonwebtoken');
+const { secret } = require('../config');
+
+// get user info
+async function getMe(req, res) {
+  try {
+    // auth
+    const token = req.get('x-access-token');
+    if (!token) return res.status(403).json({ message: 'No token provided' });
+    // get user id in jwt
+    const { id } = jwt.verify(token, secret);
+    // find user info
+    const user = await User.findById(id, {password: 0});
+    user.roles = await Role.find({ _id: user.roles}, {_id: 0});
+    return res.status(200).json({ user });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+}
 
 // return all users
 async function index(req, res) {
@@ -85,6 +104,7 @@ async function destroy(req, res) {
 }
 
 module.exports = {
+  getMe,
   index,
   show,
   store,

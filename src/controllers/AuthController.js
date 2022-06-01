@@ -38,10 +38,10 @@ async function signIn(req, res) {
 
     // puebla el feat roles mostrando el objeto entero
     const userFound = await User.findOne({ email }).populate("roles");
-    if (!userFound) return res.status(400).json({status: "User not found"});
+    if (!userFound) return res.status(400).json({status: "User not found", type:"email"});
 
     const matchPassword = await User.comparePassword(password, userFound.password);
-    if (!matchPassword) return res.status(401).json({token: null, status: "Invalid Password"});
+    if (!matchPassword) return res.status(401).json({status: "Invalid Password", type: "password"});
 
     const token = jwt.sign({id: userFound._id}, secret, {
       expiresIn: 86400 // 24 hours
@@ -52,7 +52,21 @@ async function signIn(req, res) {
   }
 }
 
+// isLogged
+async function isLogged(req, res) {
+  try {
+    const token = req.get('x-access-token');
+    if (!token) return res.status(403).json({ messagge: 'No token provided' });
+    const decoded = jwt.verify(token, secret);
+
+    res.status(200).json({ decoded })
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+}
+
 module.exports = {
   signUp,
-  signIn
+  signIn,
+  isLogged
 }

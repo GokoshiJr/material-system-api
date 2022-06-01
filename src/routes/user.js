@@ -2,7 +2,10 @@ const { verifyToken, isAdmin } = require('../middlewares/authJwt')
 const { checkRolesExisted } = require('../middlewares/verifySignup')
 const express = require('express');
 const router = express.Router();
-const { index, show, store, update, destroy } = require('../controllers/userController');
+const { getMe, index, show, store, update, destroy } = require('../controllers/userController');
+
+// get logged user
+router.post('/getMe', verifyToken, getMe);
 
 // return all users
 router.get('/', [verifyToken, isAdmin], index);
