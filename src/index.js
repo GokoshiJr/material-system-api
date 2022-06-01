@@ -22,8 +22,7 @@ app.use('/api/user', require('./routes/user'));
 
 async function initApp({ port=4000 }, dbConfig) {
   try {
-    // srv in false, to connect local db
-    await connectDb(dbConfig, false);
+    await connectDb(dbConfig);
     createRoles();
     app.listen(port, () => {
       console.log(`Server on port ${port}`);

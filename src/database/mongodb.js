@@ -5,18 +5,19 @@ mongoose.connection.on('open', () => {
   console.log('DB connected');
 });
 
-// conexion a la db de mongo dependiendo si usamos +srv
-async function connectDb({host, port, name}, srv){
+// conexion a la db de mongo dependiendo si usamos +srv (cluster)
+async function connectDb({host, port, name, srv}){
   try {
     let uri = '';
-    if (srv) {
+    if (srv === 'true') {
       uri = `mongodb+srv://${host}:${port}/${name}`;
-    } else {
+    } else if (srv === 'false') {
       uri = `mongodb://${host}:${port}/${name}`;
     }
     await mongoose.connect(uri, { useNewUrlParser: true });
   } catch (error) {
     console.log(error);
+    process.exit(0);
   }
 }
 
