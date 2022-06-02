@@ -17,6 +17,22 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  social_id: {
+    type: Number,
+    required: false
+  },
+  phone_number: {
+    type: String,
+    required: false
+  },
+  birth_date: {
+    type: Date,
+    required: false
+  },
+  direction: {
+    type: String,
+    required: false
+  },
   roles: [{
     ref: "Role",
     type: Schema.Types.ObjectId

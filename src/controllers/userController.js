@@ -43,11 +43,24 @@ async function show(req, res) {
 // create user
 async function store(req, res) {
   try {
-    const { username, email, password, roles } = req.body;
+
+    const {
+      username,
+      email,
+      password,
+      roles,
+      social_id,
+      phone_number,
+      direction
+    } = req.body;
+
     const user = new User({
       username,
       email,
       password: await User.encryptPassword(password),
+      social_id,
+      phone_number,
+      direction
     });
 
     if (roles) { // si envian un rol al crear un usuario, creamos la relacion
@@ -59,10 +72,8 @@ async function store(req, res) {
     }
 
     await user.save();
-
     res.status(200).json({ status:"User created" });
   } catch (err) {
-    console.log('aqui');
     res.status(500).send({ message: err.message });
   }
 }
@@ -70,10 +81,22 @@ async function store(req, res) {
 // update user by id
 async function update(req, res) {
   try {
-    const { username, email, password, roles } = req.body;
+    const {
+      username,
+      email,
+      password,
+      roles,
+      social_id,
+      phone_number,
+      direction
+    } = req.body;
+
     const user = {
       username,
-      email
+      email,
+      social_id,
+      phone_number,
+      direction
     };
 
     if (password) user.password = await User.encryptPassword(password)
