@@ -1,14 +1,17 @@
-const { verifyToken, isAdmin } = require('../middlewares/authJwt')
+const { verifyToken, isAdmin, isModerator } = require('../middlewares/authJwt')
 const { checkRolesExisted } = require('../middlewares/verifySignup')
 const express = require('express');
 const router = express.Router();
-const { getMe, index, show, store, update, destroy } = require('../controllers/userController');
+const { updateLoggedUser, getMe, index, show, store, update, destroy } = require('../controllers/userController');
+
+// get logged user
+router.post('/updateLoggedUser', verifyToken, updateLoggedUser);
 
 // get logged user
 router.post('/getMe', verifyToken, getMe);
 
 // return all users
-router.get('/', [verifyToken, isAdmin], index);
+router.get('/', [verifyToken, isModerator], index);
 
 // return user by id
 router.get('/:id', [verifyToken, isAdmin], show);

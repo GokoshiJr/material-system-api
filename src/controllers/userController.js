@@ -4,6 +4,41 @@ const jwt = require('jsonwebtoken');
 const { secret } = require('../config');
 
 // get user info
+async function updateLoggedUser(req, res) {
+  try {
+    const {
+      _id,
+      username,
+      email,
+      password,
+      social_id,
+      phone_number,
+      direction
+    } = req.body;
+
+    const user = {
+      username,
+      email,
+      password,
+      social_id,
+      phone_number,
+      direction
+    };
+
+    // get user id in jwt
+    // const { id } = jwt.verify(token, secret);
+    // find user info
+    // const user = await User.findById(id, {password: 0});
+    await User.findByIdAndUpdate(_id, user);
+    const userUpdated = await User.findById(_id, {password: 0});
+    userUpdated.roles = await Role.find({ _id: userUpdated.roles}, {_id: 0});
+    return res.status(200).json({ user: userUpdated });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+}
+
+// get user info
 async function getMe(req, res) {
   try {
     // auth
@@ -127,6 +162,7 @@ async function destroy(req, res) {
 }
 
 module.exports = {
+  updateLoggedUser,
   getMe,
   index,
   show,
