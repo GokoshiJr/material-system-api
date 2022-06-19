@@ -20,7 +20,7 @@ app.use('/api/product', require('./routes/Product'));
 // app.use('/api/auth', require('./routes/auth'));
 // app.use('/api/user', require('./routes/user'));
 
-async function initApp({ port=4000 }, dbConfig) {
+async function initApp({ port }, dbConfig) {
   try {
     await connectDb(dbConfig);
     createRoles();
