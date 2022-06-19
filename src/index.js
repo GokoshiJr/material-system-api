@@ -17,11 +17,11 @@ app.use(cors()); // para que responda peticiones desde otros hosts
 
 // routes
 app.use('/api/product', require('./routes/Product'));
-// app.use('/api/auth', require('./routes/auth'));
-// app.use('/api/user', require('./routes/user'));
+app.use('/api/auth', require('./routes/Auth'));
+app.use('/api/user', require('./routes/user'));
 
 app.use('/', (req, res) => {
-  res.send('Epa Alex')
+  res.send('Hello World!')
 })
 
 async function initApp({ port=4000 }, dbConfig) {
