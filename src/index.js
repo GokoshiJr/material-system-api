@@ -24,7 +24,7 @@ app.use('/', (req, res) => {
   res.send('Epa Alex')
 })
 
-async function initApp({ port }, dbConfig) {
+async function initApp({ port=4000 }, dbConfig) {
   try {
     await connectDb(dbConfig);
     createRoles();
