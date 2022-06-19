@@ -20,6 +20,10 @@ app.use('/api/product', require('./routes/Product'));
 // app.use('/api/auth', require('./routes/auth'));
 // app.use('/api/user', require('./routes/user'));
 
+app.use('/', (req, res) => {
+  res.send('Epa Alex')
+})
+
 async function initApp({ port }, dbConfig) {
   try {
     await connectDb(dbConfig);
