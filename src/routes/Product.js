@@ -2,7 +2,7 @@ const { verifyToken, isAdmin, isModerator } = require('../middlewares/authJwt')
 const upload = require('../libs/storage'); // multer permite recibir req desde form-data
 const express = require('express');
 const router = express.Router();
-const { index, show, store, update, destroy } = require('../controllers/productController');
+const { index, show, store, update, destroy } = require('../controllers/ProductController');
 
 // return all products
 router.get('/', index);
