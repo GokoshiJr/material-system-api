@@ -16,9 +16,9 @@ app.use('/public', express.static(`${__dirname}/storage/img/`)); // sirve las im
 app.use(cors()); // para que responda peticiones desde otros hosts
 
 // routes
-app.use('/api/product', require('./routes/product'));
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/user', require('./routes/user'));
+app.use('/api/product', require('./routes/Product'));
+// app.use('/api/auth', require('./routes/auth'));
+// app.use('/api/user', require('./routes/user'));
 
 async function initApp({ port=4000 }, dbConfig) {
   try {
