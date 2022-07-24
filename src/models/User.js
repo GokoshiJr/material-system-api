@@ -3,11 +3,6 @@ const bcrypt = require('bcryptjs');
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
-  username: {
-    type: String,
-    unique: true,
-    required: true
-  },
   email: {
     type: String,
     unique: true,
@@ -17,20 +12,8 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  social_id: {
-    type: Number,
-    required: false
-  },
-  phone_number: {
-    type: String,
-    required: false
-  },
-  birth_date: {
+  lastConnection: {
     type: Date,
-    required: false
-  },
-  direction: {
-    type: String,
     required: false
   },
   roles: [{
