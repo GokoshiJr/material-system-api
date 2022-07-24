@@ -19,6 +19,7 @@ app.use(cors()); // para que responda peticiones desde otros hosts
 app.use('/api/product', require('./routes/Product'));
 app.use('/api/auth', require('./routes/Auth'));
 app.use('/api/user', require('./routes/user'));
+app.use('/api/employee', require('./routes/Employee'));
 
 app.use('/', (req, res) => {
   res.send('Hello World!')
