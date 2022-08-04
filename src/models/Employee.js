@@ -32,8 +32,8 @@ const EmployeeSchema = new Schema({
     type: String
   },
   userId: [{
-    ref: "User",
-    type: Schema.Types.ObjectId
+    type: Schema.Types.ObjectId,
+    ref: "User"
   }],
 }, {
   timestamps: true,
