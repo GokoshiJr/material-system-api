@@ -10,9 +10,10 @@ const CampaignSchema = new Schema({
     type: Boolean,
     required: true
   },
-  campaignType: [
-    { type: String }
-  ],
+  campaignType: {
+    type: Schema.Types.ObjectId,
+    ref: "CampaignType"
+  },
   initDate: {
     type: Date,
     required: true
@@ -23,7 +24,43 @@ const CampaignSchema = new Schema({
   },
   campaignState: {
     type: String
-  }
+  },
+  promotePostLink: {
+    type: [{ type: String }]
+  },
+  destination: {
+    type: { type: String }
+  },
+  linkAPI: {
+    type: String
+  },
+  ubication: {
+    type: String
+  },
+  demographicsDataSegmentation: {
+    type: String
+  },
+  interestSegmentation: {
+    type: String
+  },
+  behaviorSegmentation: {
+    type: String
+  },
+  audienceAge: {
+    type: [
+      { type: Number }
+    ]
+  },
+  audienceGender: {
+    type: String
+  },
+  perDayBudget: {
+    type: Number
+  },
+  promotionDuration: {
+    type: Number
+  },
+
 }, {
   timestamps: true,
   versionKey: false
