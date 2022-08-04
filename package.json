@@ -27,7 +27,8 @@
     "@babel/core": "^7.17.9",
     "@babel/node": "^7.16.8",
     "@babel/preset-env": "^7.16.11",
-    "nodemon": "^2.0.15"
+    "@faker-js/faker": "^7.3.0",
+    "nodemon": "^2.0.19"
   },
   "engines": {
     "node": "14.x"
