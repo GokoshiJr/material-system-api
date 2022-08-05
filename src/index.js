@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { createRoles } = require('./libs/initialSetup')
+const { createRoles, createCampaignType } = require('./libs/initialSetup')
 const cors = require('cors');
 const express = require('express');
 const morgan = require('morgan');
@@ -24,6 +24,8 @@ app.use('/api/client', require('./routes/Client'));
 app.use('/api/campaign', require('./routes/Campaign'));
 app.use('/api/projection', require('./routes/Projection'));
 app.use('/api/report', require('./routes/Report'));
+// seeder
+app.use('/api/seed', require('./seeds/SeedRoute'));
 
 app.use('/', (req, res) => {
   res.send('Hello World!')
@@ -32,7 +34,8 @@ app.use('/', (req, res) => {
 async function initApp({ port=4000 }, dbConfig) {
   try {
     await connectDb(dbConfig);
-    createRoles();
+    await createRoles();
+    await createCampaignType();
     app.listen(port, () => {
       console.log(`Server on port ${port}`);
     })
