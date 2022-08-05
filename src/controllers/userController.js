@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Role = require('../models/Role');
+const Employee = require('../models/Employee');
 const jwt = require('jsonwebtoken');
 const { secret } = require('../config');
 
@@ -46,10 +47,13 @@ async function getMe(req, res) {
     if (!token) return res.status(403).json({ message: 'No token provided' });
     // get user id in jwt
     const { id } = jwt.verify(token, secret);
+    // find employee info
+    const employee = await Employee.find({ userId: { $in: [id] }})
     // find user info
     const user = await User.findById(id, {password: 0});
+
     user.roles = await Role.find({ _id: user.roles}, {_id: 0});
-    return res.status(200).json({ user });
+    return res.status(200).json({ user, employee });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
