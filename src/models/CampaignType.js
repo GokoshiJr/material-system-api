@@ -13,4 +13,4 @@ const CampaignTypeSchema = new Schema({
   versionKey: false
 });
 
-module.exports = mongoose.model('CampaignType', CampaignTypeSchema);
+module.exports = mongoose.model('campaign_type', CampaignTypeSchema);
