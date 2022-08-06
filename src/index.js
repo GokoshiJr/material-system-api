@@ -1,10 +1,16 @@
 require('dotenv').config();
-const { createRoles, createCampaignType } = require('./libs/initialSetup')
 const cors = require('cors');
 const express = require('express');
 const morgan = require('morgan');
 const connectDb = require('./database/mongodb');
 const { appConfig, dbConfig } = require('./config');
+
+// Initial Setup
+const {
+  createRoles,
+  createCampaignType,
+  createInductionElements
+} = require('./libs/initialSetup');
 
 const app = express();
 
@@ -28,7 +34,7 @@ app.use('/api/report', require('./routes/Report'));
 app.use('/api/seed', require('./seeds/SeedRoute'));
 
 app.use('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Hello World!');
 })
 
 async function initApp({ port=4000 }, dbConfig) {
@@ -36,6 +42,7 @@ async function initApp({ port=4000 }, dbConfig) {
     await connectDb(dbConfig);
     await createRoles();
     await createCampaignType();
+    await createInductionElements();
     app.listen(port, () => {
       console.log(`Server on port ${port}`);
     })
