@@ -10,7 +10,7 @@ const CampaignSchema = new Schema({
     type: Boolean,
     required: true
   },
-  campaignType: {
+  campaignTypeId: {
     type: Schema.Types.ObjectId,
     ref: "CampaignType"
   },
