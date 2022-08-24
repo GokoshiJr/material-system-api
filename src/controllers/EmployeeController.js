@@ -6,7 +6,17 @@ const Employee = require('../models/Employee');
 // return all products
 async function index(req, res) {
   try {
-    const employees = await Employee.find();
+    const employees = await Employee.find()
+    .populate({
+      path: 'userId',
+      populate: {
+        select: '-_id',
+        path: 'roles',
+        model: 'Role'
+
+      }
+    })
+
     res.json(employees);
   } catch (err) {
     res.status(500).send({ message: err.message });
@@ -16,7 +26,18 @@ async function index(req, res) {
 // return employee by id
 async function show(req, res) {
   try {
-    const employee = await Employee.findById(req.params.id);
+    const employee = await Employee.findById(req.params.id)
+    .populate({
+      path: 'userId',
+      select: '-password',
+      populate: {
+        select: '-_id',
+        path: 'roles',
+        model: 'Role'
+      }
+    });
+    const email = employee.userId.email
+    employee.email = email
     res.json(employee);
   } catch (err) {
     res.status(500).send({ message: err.message });
@@ -76,6 +97,9 @@ async function update(req, res) {
       const foundUser = await User.findById(userId)
       updateEmployee.userId = foundUser._id
     }
+    if (birthDate) {
+      updateEmployee.birthDate = new Date(birthDate)
+    }
     const employee = await Employee.findByIdAndUpdate(req.params.id, updateEmployee);
     if (req.file) {
       // si envian una img nueva, eliminamos la nueva
@@ -96,10 +120,10 @@ async function update(req, res) {
 async function destroy(req, res) {
   try {
     const employee = await Employee.findByIdAndRemove(req.params.id);
-    if (employee.imgUrl) {
+    /* if (employee.imgUrl) {
       const image = employee.imgUrl.split('/');
       await fs.unlink(path.join(__dirname + `/../storage/img/${image[image.length-1]}`))
-    }
+    } */
     res.json({ status: "Employee deleted" });
   } catch (err) {
     res.status(500).send({ message: err.message });

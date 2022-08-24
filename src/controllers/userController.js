@@ -4,42 +4,56 @@ const Employee = require('../models/Employee');
 const jwt = require('jsonwebtoken');
 const { secret } = require('../config');
 
-// get user info
-async function updateLoggedUser(req, res) {
+// create user and employee
+async function createUserEmployee(req, res) {
   try {
+
     const {
-      _id,
-      username,
       email,
       password,
-      social_id,
-      phone_number,
-      direction
+      roles,
+      name,
+      lastName,
+      birthDate,
+      socialId,
+      phoneNumber
     } = req.body;
 
-    const user = {
-      username,
+    const user = new User({
       email,
-      password,
-      social_id,
-      phone_number,
-      direction
-    };
+      password: await User.encryptPassword('password'),
+      roles
+    });
 
-    // get user id in jwt
-    // const { id } = jwt.verify(token, secret);
-    // find user info
-    // const user = await User.findById(id, {password: 0});
-    await User.findByIdAndUpdate(_id, user);
-    const userUpdated = await User.findById(_id, {password: 0});
-    userUpdated.roles = await Role.find({ _id: userUpdated.roles}, {_id: 0});
-    return res.status(200).json({ user: userUpdated });
+    if (roles) { // si envian un rol al crear un usuario, creamos la relacion
+      const foundRoles = await Role.find({ name: {$in: roles} })
+      user.roles = foundRoles.map(role => role._id);
+    } else { // sino tendra el rol user por defecto
+      const role = await Role.findOne({ name: "user" });
+      user.roles = [role._id];
+    }
+
+    const newUser = await user.save();
+
+    const employee = new Employee({
+      name,
+      lastName,
+      birthDate,
+      socialId,
+      phoneNumber,
+      userId: newUser._id
+    })
+
+    employee.save();
+
+    res.status(200).json({ status:"Empleado creado con exito" });
   } catch (err) {
+    console.log(err)
     res.status(500).send({ message: err.message });
   }
 }
 
-// get user info
+// get logged user/employee info
 async function getMe(req, res) {
   try {
     // auth
@@ -48,11 +62,9 @@ async function getMe(req, res) {
     // get user id in jwt
     const { id } = jwt.verify(token, secret);
     // find employee info
-    const employee = await Employee.find({ userId: { $in: [id] }})
+    const employee = await Employee.findOne({ userId: { $in: [id] }}).populate('userId')
     // find user info
-    const user = await User.findById(id, {password: 0});
-
-    user.roles = await Role.find({ _id: user.roles}, {_id: 0});
+    const user = await User.findById(id, {password: 0}).populate("roles");
     return res.status(200).json({ user, employee });
   } catch (err) {
     res.status(500).send({ message: err.message });
@@ -166,7 +178,7 @@ async function destroy(req, res) {
 }
 
 module.exports = {
-  updateLoggedUser,
+  createUserEmployee,
   getMe,
   index,
   show,

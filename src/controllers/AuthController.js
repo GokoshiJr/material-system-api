@@ -10,6 +10,7 @@ async function signUp(req, res) {
     const user = new User({
       email,
       password: await User.encryptPassword(password),
+      lastConnection: Date.now()
     });
     if (roles) { // si envian un rol al crear un usuario, creamos la relacion
       const foundRoles = await Role.find({ name: {$in: roles} })
@@ -50,7 +51,7 @@ async function isLogged(req, res) {
     const token = req.get('x-access-token');
     if (!token) return res.status(403).json({ messagge: 'No token provided' });
     const decoded = jwt.verify(token, secret);
-    res.status(200).json({ decoded })
+    res.status(200).json({ status: "Ok" })
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
