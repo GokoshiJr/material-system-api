@@ -2,10 +2,18 @@ const { verifyToken, isAdmin} = require('../middlewares/authJwt')
 const { checkRolesExisted } = require('../middlewares/verifySignup')
 const express = require('express');
 const router = express.Router();
-const { updateLoggedUser, getMe, index, show, store, update, destroy } = require('../controllers/UserController');
+const {
+  createUserEmployee,
+  getMe,
+  index,
+  show,
+  store,
+  update,
+  destroy
+} = require('../controllers/UserController');
 
-// get logged user
-router.post('/updateLoggedUser', verifyToken, updateLoggedUser);
+// create user and employee
+router.post('/createUserEmployee', [verifyToken, isAdmin], createUserEmployee);
 
 // get logged user
 router.post('/getMe', verifyToken, getMe);

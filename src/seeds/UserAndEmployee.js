@@ -1,6 +1,8 @@
 const { faker } = require('@faker-js/faker');
 const User = require('../models/User');
 const Employee = require('../models/Employee');
+const Role = require('../models/Role');
+const mongoose = require('mongoose')
 
 async function seedUserAndEmployee(randomSeed, numFakeUsers) {
   try {
@@ -13,7 +15,8 @@ async function seedUserAndEmployee(randomSeed, numFakeUsers) {
         email: faker.internet.email(name, lastName),
         lastConnection: faker.date.between('2020-01-01T00:00:00.000Z','2030-01-01T00:00:00.000Z'),
         password: await User.encryptPassword('password'),
-        roles: ['62dd5a68fccaafaeb06b8dd9']
+        roles: await Role.find({name: "user"})
+
       })
       const user = await newUser.save();
       // generacion aleatoria de empleados
@@ -25,7 +28,7 @@ async function seedUserAndEmployee(randomSeed, numFakeUsers) {
         socialId: faker.random.numeric(8),
         phoneNumber: faker.phone.number('+58 424 ### ####'),
         imgUrl: faker.image.people(),
-        userId: [user._id]
+        userId: user._id
       })
       await newEmployee.save();
     }

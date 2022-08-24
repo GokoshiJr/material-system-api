@@ -22,6 +22,7 @@ const EmployeeSchema = new Schema({
   },
   socialId: {
     type: String,
+    unique: true,
     required: true
   },
   phoneNumber: {
@@ -31,10 +32,10 @@ const EmployeeSchema = new Schema({
   imgUrl: {
     type: String
   },
-  userId: [{
+  userId: {
     type: Schema.Types.ObjectId,
     ref: "User"
-  }],
+  },
 }, {
   timestamps: true,
   versionKey: false
