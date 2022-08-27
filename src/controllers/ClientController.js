@@ -1,6 +1,4 @@
-const fs = require('fs').promises;
 const Client = require('../models/Client');
-const path = require('path');
 
 // return all clients
 async function index(req, res) {
@@ -32,7 +30,8 @@ async function store(req, res) {
       phoneNumber,
       userAccount,
       password,
-      socialPlatform
+      socialPlatform,
+      associated
     } = req.body;
     const client = new Client({
       name,
@@ -41,7 +40,8 @@ async function store(req, res) {
       phoneNumber,
       userAccount,
       password: await Client.encryptPassword(password),
-      socialPlatform
+      socialPlatform,
+      associated
     });
     await client.save();
     res.json({ status: "Client created" });
@@ -60,7 +60,8 @@ async function update(req, res) {
       phoneNumber,
       userAccount,
       password,
-      socialPlatform
+      socialPlatform,
+      associated
     } = req.body;
     const updateClient = {
       name,
@@ -68,7 +69,8 @@ async function update(req, res) {
       email,
       phoneNumber,
       userAccount,
-      socialPlatform
+      socialPlatform,
+      associated
     };
     if (password) updateClient.password = await Client.encryptPassword(password)
     await Client.findByIdAndUpdate(req.params.id, updateClient);
