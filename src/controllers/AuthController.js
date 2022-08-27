@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Role = require('../models/Role');
+const Employee = require('../models/Employee');
 const jwt = require('jsonwebtoken');
 const { secret } = require('../config');
 
@@ -32,10 +33,14 @@ async function signIn(req, res) {
     const { email, password } = req.body;
     // puebla el feat roles mostrando el objeto entero
     const userFound = await User.findOne({ email }).populate("roles");
-    if (!userFound) return res.status(400).json({ status: "User not found", type:"email" });
+    if (!userFound) return res.status(400).json({ status: "Usuario no encontrado", type: "email" });
     // validacion de la password
     const matchPassword = await User.comparePassword(password, userFound.password);
-    if (!matchPassword) return res.status(401).json({ status: "Invalid Password", type: "password" });
+    if (!matchPassword) return res.status(401).json({ status: "Clave invalida", type: "password" });
+    // validacion de usuario baneado
+    const employee = await Employee.findOne({ userId: userFound._id})
+    if (!employee.accessState) return res.status(401).json({ status: 'Usuario baneado' });
+    // log exitoso retornamos el token jwt
     const token = jwt.sign({ id: userFound._id }, secret, {
       expiresIn: 86400 // 24 hours
     });
