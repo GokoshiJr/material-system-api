@@ -1,7 +1,10 @@
 const { verifyToken } = require('../middlewares/authJwt')
 const express = require('express');
 const router = express.Router();
-const { index, show, store, update, destroy } = require('../controllers/CampaignController');
+const { stadistics, index, show, store, update, destroy } = require('../controllers/CampaignController');
+
+// return statdistics for campaigns
+router.get('/stadistics', verifyToken, stadistics);
 
 // return all campaigns
 router.get('/', verifyToken, index);

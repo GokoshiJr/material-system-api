@@ -1,6 +1,25 @@
 const Campaign = require('../models/Campaign');
 
 // return all campaigns
+async function stadistics(req, res) {
+  try {
+    const total = await Campaign.count();
+    const on = await Campaign.find({'campaignState': 'on'}).count()
+    const paused = await Campaign.find({'campaignState': 'paused'}).count()
+    const finalized = await Campaign.find({'campaignState': 'finalized'}).count()
+    let result = {
+      total,
+      on,
+      paused,
+      finalized
+    }
+    res.json(result);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+}
+
+// return all campaigns
 async function index(req, res) {
   try {
     const campaigns = await Campaign.find();
@@ -83,6 +102,7 @@ async function destroy(req, res) {
 }
 
 module.exports = {
+  stadistics,
   index,
   show,
   store,
