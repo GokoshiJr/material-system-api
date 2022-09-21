@@ -11,11 +11,6 @@ const EmployeeSchema = new Schema({
     type: String,
     required: true
   },
-  accessState: {
-    type: Boolean,
-    default: true,
-    required: true
-  },
   birthDate: {
     type: Date,
     required: false
