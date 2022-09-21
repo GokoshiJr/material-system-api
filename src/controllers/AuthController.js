@@ -38,8 +38,7 @@ async function signIn(req, res) {
     const matchPassword = await User.comparePassword(password, userFound.password);
     if (!matchPassword) return res.status(401).json({ status: "Clave invalida", type: "password" });
     // validacion de usuario baneado
-    const employee = await Employee.findOne({ userId: userFound._id})
-    if (!employee.accessState) return res.status(401).json({ status: 'Usuario baneado' });
+    if (!userFound.accessState) return res.status(401).json({ status: 'Usuario baneado' });
     // log exitoso retornamos el token jwt
     const token = jwt.sign({ id: userFound._id }, secret, {
       expiresIn: 86400 // 24 hours

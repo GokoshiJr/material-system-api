@@ -133,6 +133,7 @@ async function store(req, res) {
 async function update(req, res) {
   try {
     const {
+      accessState,
       username,
       email,
       password,
@@ -143,6 +144,7 @@ async function update(req, res) {
     } = req.body;
 
     const user = {
+      accessState,
       username,
       email,
       social_id,

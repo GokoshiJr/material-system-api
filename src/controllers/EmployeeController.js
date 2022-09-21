@@ -78,7 +78,6 @@ async function update(req, res) {
     const {
       name,
       lastName,
-      accessState,
       birthDate,
       socialId,
       phoneNumber,
@@ -87,7 +86,6 @@ async function update(req, res) {
     const updateEmployee = {
       name,
       lastName,
-      accessState,
       birthDate,
       socialId,
       phoneNumber,
