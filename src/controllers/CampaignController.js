@@ -1,19 +1,67 @@
 const Campaign = require('../models/Campaign');
+const CampaignType = require('../models/CampaignType');
 
 // return all campaigns
 async function stadistics(req, res) {
   try {
     const total = await Campaign.count();
-    const on = await Campaign.find({'campaignState': 'on'}).count()
-    const paused = await Campaign.find({'campaignState': 'paused'}).count()
-    const finalized = await Campaign.find({'campaignState': 'finalized'}).count()
-    let result = {
+    // contador - estado de las campañas
+    const on = await Campaign.find({'campaignState': 'on'}).count();
+    const paused = await Campaign.find({'campaignState': 'paused'}).count();
+    const finalized = await Campaign.find({'campaignState': 'finalized'}).count();
+    // contador - tipos de campañas
+    const types = await Campaign.aggregate([
+      {
+        $group: {
+          _id: '$campaignTypeId',
+          count: { $sum: 1}
+        }
+      }
+    ])
+    let campaignTypes = [];    
+    for (const element of types) {
+      const { name } = await CampaignType.findById(element._id).select('-_id name')
+      campaignTypes.push({
+        value: element.count,
+        label: name 
+      })
+    }    
+    campaignTypes.sort((a, b) => a.value - b.value)    
+    // contador - campañas por genero
+    const gender = await Campaign.aggregate([
+      {
+        $group: {
+          _id: '$audienceGender',
+          count: { $sum: 1}
+        }
+      }
+    ])
+    let genderAudience = []
+    for (const element of gender) {
+      genderAudience.push({
+        value: element.count,
+        label: element._id
+      })
+    }
+    // edad de la audiencia target
+    const age = await Campaign.find({}).select('-_id audienceAge');
+    const ageAudienceTarget = age.map(el => (
+      {
+        x: el.audienceAge[0],
+        y: el.audienceAge[1]
+      }
+    ))
+    
+    res.json({
       total,
       on,
       paused,
-      finalized
-    }
-    res.json(result);
+      finalized,
+      campaignTypes,
+      genderAudience,
+      ageAudienceTarget
+    });
+
   } catch (err) {
     res.status(500).send({ message: err.message });
   }

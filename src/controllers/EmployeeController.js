@@ -13,7 +13,6 @@ async function index(req, res) {
         select: '-_id',
         path: 'roles',
         model: 'Role'
-
       }
     })
 
