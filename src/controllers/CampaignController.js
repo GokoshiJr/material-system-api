@@ -70,7 +70,8 @@ async function stadistics(req, res) {
 // return all campaigns
 async function index(req, res) {
   try {
-    const campaigns = await Campaign.find();
+    const campaigns = await Campaign.find()
+    .populate({ path: 'campaignTypeId', select: '-_id name' });
     res.json(campaigns);
   } catch (err) {
     res.status(500).send({ message: err.message });
