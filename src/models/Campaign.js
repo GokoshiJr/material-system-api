@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const CampaignSchema = new Schema({
+  name: {
+    type: String,
+    required: true
+  },
   isPost: {
     type: Boolean,
     required: true
@@ -12,7 +16,7 @@ const CampaignSchema = new Schema({
   },
   campaignTypeId: {
     type: Schema.Types.ObjectId,
-    ref: "CampaignType"
+    ref: "campaign_type"
   },
   initDate: {
     type: Date,
@@ -42,10 +46,7 @@ const CampaignSchema = new Schema({
   },
   interestSegmentation: {
     type: String
-  },
-  behaviorSegmentation: {
-    type: String
-  },
+  },  
   audienceAge: {
     type: [
       { type: Number }
