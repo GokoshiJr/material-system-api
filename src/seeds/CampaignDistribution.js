@@ -1,4 +1,4 @@
-const { faker } = require('@faker-js/faker');
+const { faker } = require('@faker-js/faker/locale/es_MX');
 const CampaignType = require('../models/CampaignType');
 const Campaign = require('../models/Campaign');
 const axios = require('axios');
@@ -7,10 +7,12 @@ const addDays = require('date-fns/addDays')
 // campaign with distribution
 async function seedCampaignDistribution(randomSeed) {
   try {
-
     if (randomSeed) faker.seed(Number(randomSeed));
+
+    // python - clean data
     const { data } = await axios.get('http://localhost:5000/api/seed')
     const distArray = data.data // [{ MPG: 18, Horsepower: 130 }]
+
     const countCampaignType = await CampaignType.count();
 
     for (const element of distArray) {
@@ -24,6 +26,7 @@ async function seedCampaignDistribution(randomSeed) {
       )
 
       const newCampaign = new Campaign({
+        name: faker.commerce.productName(),
         isPost,
         isVideo: !isPost,
         campaignTypeId: campaignType._id,
@@ -42,12 +45,19 @@ async function seedCampaignDistribution(randomSeed) {
           'Tu sitio web',
           'Tus mensajes Directo. (MSN de IG & FB)',
           'API o Link de WhatsApp'
+        ]),        
+        linkAPI: faker.internet.url(),        
+        ubication: faker.helpers.arrayElement([
+          'Carabobo', 'Lara', 'Aragua', 'Miranda',
+          'Guarico', 'Distrito Capital'
         ]),
-        linkAPI: faker.internet.url(),
-        ubication: faker.address.cityName(), // to do
-        demographicsDataSegmentation: faker.lorem.sentence(4), // to do
-        interestSegmentation: faker.lorem.sentence(4), // to do
-        behaviorSegmentation: faker.lorem.sentence(4), // to do
+        demographicsDataSegmentation: faker.helpers.arrayElement([
+          'Nivel de ingresos', 'Edad', 'Religion', 'Educacion'
+        ]),
+        interestSegmentation: faker.helpers.arrayElement([
+          'Aficiones y Actividades', 'Comida y bebidas', 'Compras y Moda', 
+          'Deportes', 'Entretenimiento', 'Familia', 'Fitness', 'Negocios', 'Tecnologia'
+        ]),        
         audienceAge: [
           Number(faker.finance.amount(13, 30, 0)),
           Number(faker.finance.amount(31, 65, 0))

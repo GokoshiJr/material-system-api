@@ -1,4 +1,4 @@
-const { faker } = require('@faker-js/faker');
+const { faker } = require('@faker-js/faker/locale/es_MX');
 const Client = require('../models/Client');
 
 async function seedClient(randomSeed, numFake) {
