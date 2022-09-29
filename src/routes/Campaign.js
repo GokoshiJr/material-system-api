@@ -1,7 +1,18 @@
 const { verifyToken } = require('../middlewares/authJwt')
 const express = require('express');
 const router = express.Router();
-const { stadistics, index, show, store, update, destroy } = require('../controllers/CampaignController');
+const {
+	clientInCampaign,
+	stadistics,
+	index,
+	show,
+	store,
+	update,
+	destroy
+} = require('../controllers/CampaignController');
+
+// return clientInCampaign for campaign
+router.get('/clientInCampaign/:id', verifyToken, clientInCampaign);
 
 // return statdistics for campaigns
 router.get('/stadistics', verifyToken, stadistics);

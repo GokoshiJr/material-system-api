@@ -45,8 +45,8 @@ async function seedCampaignDistribution(randomSeed) {
           'Tu sitio web',
           'Tus mensajes Directo. (MSN de IG & FB)',
           'API o Link de WhatsApp'
-        ]),        
-        linkAPI: faker.internet.url(),        
+        ]),
+        linkAPI: faker.internet.url(),
         ubication: faker.helpers.arrayElement([
           'Carabobo', 'Lara', 'Aragua', 'Miranda',
           'Guarico', 'Distrito Capital'
@@ -57,7 +57,7 @@ async function seedCampaignDistribution(randomSeed) {
         interestSegmentation: faker.helpers.arrayElement([
           'Aficiones y Actividades', 'Comida y bebidas', 'Compras y Moda', 
           'Deportes', 'Entretenimiento', 'Familia', 'Fitness', 'Negocios', 'Tecnologia'
-        ]),        
+        ]),
         audienceAge: [
           Number(faker.finance.amount(13, 30, 0)),
           Number(faker.finance.amount(31, 65, 0))

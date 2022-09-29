@@ -1,5 +1,20 @@
 const Campaign = require('../models/Campaign');
+const Projection = require('../models/Projection');
 const CampaignType = require('../models/CampaignType');
+
+// return client by campaign id
+async function clientInCampaign(req, res) {
+  try {
+    const projection = await Projection.findOne({campaignId: req.params.id})
+    .populate({
+      path: 'clientId',
+      select: '_id name lastName'
+    });
+    res.json(projection);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+}
 
 // return all campaigns
 async function stadistics(req, res) {
@@ -18,15 +33,15 @@ async function stadistics(req, res) {
         }
       }
     ])
-    let campaignTypes = [];    
+    let campaignTypes = [];
     for (const element of types) {
       const { name } = await CampaignType.findById(element._id).select('-_id name')
       campaignTypes.push({
         value: element.count,
         label: name 
       })
-    }    
-    campaignTypes.sort((a, b) => a.value - b.value)    
+    }
+    campaignTypes.sort((a, b) => a.value - b.value)
     // contador - campañas por genero
     const gender = await Campaign.aggregate([
       {
@@ -51,7 +66,7 @@ async function stadistics(req, res) {
         y: el.audienceAge[1]
       }
     ))
-    
+
     res.json({
       total,
       on,
@@ -81,7 +96,8 @@ async function index(req, res) {
 // return campaign by id
 async function show(req, res) {
   try {
-    const campaign = await Campaign.findById(req.params.id);
+    const campaign = await Campaign.findById(req.params.id)
+    .populate({ path: 'campaignTypeId', select: '-_id name' });
     res.json(campaign);
   } catch (err) {
     res.status(500).send({ message: err.message });
@@ -151,6 +167,7 @@ async function destroy(req, res) {
 }
 
 module.exports = {
+  clientInCampaign,
   stadistics,
   index,
   show,
