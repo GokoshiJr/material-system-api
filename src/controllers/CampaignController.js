@@ -1,6 +1,28 @@
 const Campaign = require('../models/Campaign');
 const Projection = require('../models/Projection');
 const CampaignType = require('../models/CampaignType');
+const Client = require('../models/Client');
+
+// return client by campaign id
+async function clientCampaigns(req, res) {
+  try {
+    const campaigns = await Projection.find({clientId: req.params.id}, 'campaignId -_id')
+    .populate({
+      path: 'campaignId',
+      populate: {
+        path: 'campaignTypeId',
+        model: 'campaign_type'
+      }
+    });
+    const client = await Client.findById(req.params.id, 'name');
+    res.json({
+      campaigns: campaigns.map((el) => el.campaignId),
+      clientName: client
+    });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+}
 
 // return client by campaign id
 async function clientInCampaign(req, res) {
@@ -167,6 +189,7 @@ async function destroy(req, res) {
 }
 
 module.exports = {
+  clientCampaigns,
   clientInCampaign,
   stadistics,
   index,
