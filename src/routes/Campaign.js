@@ -2,6 +2,7 @@ const { verifyToken } = require('../middlewares/authJwt')
 const express = require('express');
 const router = express.Router();
 const {
+	getCampaignTypes,
 	clientCampaigns,
 	clientInCampaign,
 	stadistics,
@@ -11,6 +12,9 @@ const {
 	update,
 	destroy
 } = require('../controllers/CampaignController');
+
+// return all campaign types
+router.get('/campaignTypes', verifyToken, getCampaignTypes);
 
 // return campaigns for client by id
 router.get('/clientCampaigns/:id', verifyToken, clientCampaigns);

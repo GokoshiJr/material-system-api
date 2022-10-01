@@ -27,7 +27,8 @@ const CampaignSchema = new Schema({
     required: true
   },
   campaignState: {
-    type: String
+    type: String,
+    default: 'on'
   },
   promotePostLink: {
     type: [{ type: String }]

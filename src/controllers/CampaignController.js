@@ -3,6 +3,16 @@ const Projection = require('../models/Projection');
 const CampaignType = require('../models/CampaignType');
 const Client = require('../models/Client');
 
+// return all campaign types
+async function getCampaignTypes(req, res) {
+  try {
+    const campaignsTypes = await CampaignType.find()
+    res.json(campaignsTypes);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+}
+
 // return client by campaign id
 async function clientCampaigns(req, res) {
   try {
@@ -130,21 +140,45 @@ async function show(req, res) {
 async function store(req, res) {
   try {
     const {
-      isPost,
-      isVideo,
-      campaignType,
-      initDate,
+      audienceAge,
+      audienceGender,
+      campaignState,
+      campaignTypeId,
+      demographicsDataSegmentation,
+      destination,
       finalDate,
-      campaignState
-    } = req.body;
-    const campaign = new Campaign({
+      initDate,
+      interestSegmentation,
       isPost,
       isVideo,
-      campaignType,
-      initDate: new Date(initDate),
-      finalDate: new Date(finalDate),
-      campaignState
+      linkAPI,
+      name,
+      perDayBudget,
+      promotePostLink,
+      promotionDuration,
+      ubication
+    } = req.body;
+
+    const campaign = new Campaign({
+      audienceAge,
+      audienceGender,
+      campaignState,
+      campaignTypeId,
+      demographicsDataSegmentation,
+      destination,
+      finalDate,
+      initDate,
+      interestSegmentation,
+      isPost,
+      isVideo,
+      linkAPI,
+      name,
+      perDayBudget,
+      promotePostLink,
+      promotionDuration,
+      ubication
     });
+    
     await campaign.save();
     res.json({ status: "Campaign created" });
   } catch (err) {
@@ -189,6 +223,7 @@ async function destroy(req, res) {
 }
 
 module.exports = {
+  getCampaignTypes,
   clientCampaigns,
   clientInCampaign,
   stadistics,
