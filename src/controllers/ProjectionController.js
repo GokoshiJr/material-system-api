@@ -36,7 +36,7 @@ async function store(req, res) {
       clientId
     });
     await projection.save();
-    res.json({ status: "Projection created" });
+    res.json({ title: "Proyeccion creada con exito", icon: "success" });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }

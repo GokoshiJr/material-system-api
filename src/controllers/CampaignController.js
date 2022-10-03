@@ -4,6 +4,35 @@ const CampaignType = require('../models/CampaignType');
 const Client = require('../models/Client');
 
 // return all campaign types
+async function getCampaignUnasigned(req, res) {
+  try {
+    // campañas asignadas en una proyeccion
+    const projections = await Projection.find()
+      .populate('campaignId')
+      .select('-_id campaignId')
+    // id de las campañas en la proyeccion
+    const campaignsInProjection = projections.map((el) => String(el.campaignId._id))    
+
+    // todas las campañas
+    const aux = await Campaign.find()
+    // filtramos los id
+    const campaigns = aux.map((el) => String(el._id))
+
+    // diferencia de conjuntos - campañas que no tengan una proyeccion
+    let difference = campaigns.filter(x => !campaignsInProjection.includes(x))
+
+    // campañas sin proyeccion
+    const unasigned = await Campaign.find({
+      '_id': { $in: difference }
+    }).populate({ path: 'campaignTypeId', select: '-_id name' });
+
+    res.json(unasigned);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+}
+
+// return all campaign types
 async function getCampaignTypes(req, res) {
   try {
     const campaignsTypes = await CampaignType.find()
@@ -223,6 +252,7 @@ async function destroy(req, res) {
 }
 
 module.exports = {
+  getCampaignUnasigned,
   getCampaignTypes,
   clientCampaigns,
   clientInCampaign,

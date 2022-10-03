@@ -2,6 +2,7 @@ const { verifyToken } = require('../middlewares/authJwt')
 const express = require('express');
 const router = express.Router();
 const {
+	getCampaignUnasigned,
 	getCampaignTypes,
 	clientCampaigns,
 	clientInCampaign,
@@ -12,6 +13,10 @@ const {
 	update,
 	destroy
 } = require('../controllers/CampaignController');
+
+
+// return all campaigns unasigned in projection
+router.get('/unasigned', verifyToken, getCampaignUnasigned);
 
 // return all campaign types
 router.get('/campaignTypes', verifyToken, getCampaignTypes);
