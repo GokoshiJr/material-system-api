@@ -1,4 +1,41 @@
 const Client = require('../models/Client');
+const Campaign = require('../models/Campaign');
+const Projection = require('../models/Projection');
+const mongoose = require('mongoose')
+
+// return stadistics of the client
+async function clientStadistic(req, res) {
+  try {
+    // group by - audience gender
+    const campaigns = await Projection.aggregate([
+      {"$match": {"clientId": mongoose.Types.ObjectId(req.params.id)} },
+      {"$lookup":
+        {
+          "from": "campaigns",
+          "localField": "campaignId",
+          "foreignField": "_id",
+          "as":"campaign"
+        }
+      },
+      {"$unwind": "$campaign"},
+      {"$group":
+        {
+          "_id": "$campaign.audienceGender",
+          "count": {"$sum": 1}
+        }
+      },
+    ])
+    // format to display in frontend
+    const audienceGender = campaigns.map((el) => ({label: el._id, value: el.count}))
+
+    res.json({
+      audienceGender
+    });
+    
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+}
 
 // return all clients
 async function index(req, res) {
@@ -91,6 +128,7 @@ async function destroy(req, res) {
 }
 
 module.exports = {
+  clientStadistic,
   index,
   show,
   store,

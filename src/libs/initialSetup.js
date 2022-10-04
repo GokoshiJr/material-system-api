@@ -191,10 +191,6 @@ const createSegmentation = async () => {
       new Segmentation({
         name: 'Intereses',
         description: 'La segmentación por intereses debe hacer que el público sea más específico según sus comportamientos, gustos y aficiones'
-      }).save(),
-      new Segmentation({
-        name: 'Comportamiento',
-        description: 'La segmentación por comportamiento es la que nos permite llegar a usuarios según determinados hábitos, ciertas actividades o el uso de dispositivos de acuerdo con sus conocimientos, actitudes, costumbres o respuesta a ciertos productos. Ej. Existen grupos de personas con estilos de vida diferentes, como rockeros y salseros. Cada grupo tiene intereses y hábitos de compra distintos'
       }).save()
     ]);
   } catch (err) {
