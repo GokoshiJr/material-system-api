@@ -1,7 +1,17 @@
 const { verifyToken } = require('../middlewares/authJwt')
 const express = require('express');
 const router = express.Router();
-const { index, show, store, update, destroy } = require('../controllers/ClientController');
+const { 
+	index, 
+	show, 
+	store, 
+	update, 
+	destroy, 
+	clientStadistic 
+} = require('../controllers/ClientController');
+
+// return all clients
+router.get('/clientStadistic/:id', verifyToken, clientStadistic);
 
 // return all clients
 router.get('/', verifyToken, index);
