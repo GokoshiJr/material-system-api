@@ -3,12 +3,30 @@ const Campaign = require('../models/Campaign');
 const Projection = require('../models/Projection');
 const mongoose = require('mongoose')
 
-// return stadistics of the client
-async function clientStadistic(req, res) {
+async function campaignTimeline(clientId) {
+  const query = await Projection.aggregate([
+    { "$match": { "clientId": mongoose.Types.ObjectId(clientId) } },
+    // join - campañas
+    { "$lookup":
+      {
+        "from": "campaigns",
+        "localField": "campaignId",
+        "foreignField": "_id",
+        "as":"campaign"
+      }
+    },
+    { "$unwind": "$campaign" },
+    { "$sort": { "campaign.initDate": -1} }
+  ])
+  return query
+}
+
+async function groupStadisticQuery(clientId, query) {
   try {
     // group by - audience gender
-    const campaigns = await Projection.aggregate([
-      {"$match": {"clientId": mongoose.Types.ObjectId(req.params.id)} },
+    const group = await Projection.aggregate([
+      {"$match": { "clientId": mongoose.Types.ObjectId(clientId) } },
+      // join - campañas
       {"$lookup":
         {
           "from": "campaigns",
@@ -18,20 +36,86 @@ async function clientStadistic(req, res) {
         }
       },
       {"$unwind": "$campaign"},
-      {"$group":
+      // join - tipo de campañas
+      {"$lookup":
         {
-          "_id": "$campaign.audienceGender",
-          "count": {"$sum": 1}
+          "from": "campaign_types",
+          "localField": "campaign.campaignTypeId",
+          "foreignField": "_id",
+          "as":"campaign.campaignType"
         }
       },
+      {"$unwind": "$campaign.campaignType"},
+      // agrupar por el campo que se ingrese por parametro
+      {"$group":
+        {
+          "_id": `$campaign.${query}`,
+          "count": { "$sum": 1 }
+        }
+      }
     ])
-    // format to display in frontend
-    const audienceGender = campaigns.map((el) => ({label: el._id, value: el.count}))
+    return group
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+// return stadistics of the client
+async function clientStadistic(req, res) {
+  try {
+    const clientId = req.params.id;
+
+    // campaign timeline
+    let timeline = await campaignTimeline(clientId);
+    timeline = timeline.map(({ campaign }) => ({ 
+      id: campaign._id,
+      title: campaign.name,
+      time: campaign.initDate,
+      finalDate: campaign.finalDate,
+      campaignState: campaign.campaignState
+    }))
+    timeline.sort((a, b) => a.time - b.finalDate)
+
+    // group by - audience gender
+    let audienceGender = await groupStadisticQuery(clientId, "audienceGender");
+    audienceGender = audienceGender.map((el) => ({label: el._id, value: el.count}))
+
+    let ubication = await groupStadisticQuery(clientId, "ubication");
+    ubication = ubication.map((el) => ({label: el._id, value: el.count}))
+
+    let demographicsDataSegmentation = await groupStadisticQuery(clientId, "demographicsDataSegmentation")
+    demographicsDataSegmentation = demographicsDataSegmentation.map((el) => ({label: el._id, value: el.count}))
+    demographicsDataSegmentation.sort((a, b) => b.value - a.value)
+
+    let campaignState = await groupStadisticQuery(clientId, "campaignState")
+    campaignState = campaignState.map((el) => ({label: el._id, value: el.count}))
+
+    let interestSegmentation = await groupStadisticQuery(clientId, "interestSegmentation")
+    interestSegmentation = interestSegmentation.map((el) => ({label: el._id, value: el.count}))
+
+    let isPost = await groupStadisticQuery(clientId, "isPost")
+    let display = [
+      { label: 'isVideo', value: isPost[0].count },
+      { label: 'isPost', value: isPost[1].count },
+    ]
+
+    let campaignType = await groupStadisticQuery(clientId, "campaignType")
+    campaignType = campaignType.map((el) => ({label: el._id.name, description: el._id.description,value: el.count}))
+
+    // re roll - campaignDistribution - projections
+    // console.log(await groupStadisticQuery(clientId, "destination"))
 
     res.json({
-      audienceGender
+      timeline,
+      audienceGender,
+      ubication,
+      demographicsDataSegmentation,
+      campaignState,
+      interestSegmentation,
+      display,
+      campaignType
     });
-    
+
   } catch (err) {
     res.status(500).send({ message: err.message });
   }

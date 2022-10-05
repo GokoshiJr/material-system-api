@@ -34,7 +34,7 @@ const CampaignSchema = new Schema({
     type: [{ type: String }]
   },
   destination: {
-    type: { type: String }
+    type: String 
   },
   linkAPI: {
     type: String

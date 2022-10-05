@@ -3,6 +3,7 @@ const Role = require('../models/Role');
 const Employee = require('../models/Employee');
 const jwt = require('jsonwebtoken');
 const { secret } = require('../config');
+const mongoose = require('mongoose')
 
 // create user and employee
 async function createUserEmployee(req, res) {
@@ -132,6 +133,7 @@ async function store(req, res) {
 // update user by id
 async function update(req, res) {
   try {
+
     const {
       accessState,
       username,
@@ -162,7 +164,7 @@ async function update(req, res) {
       user.roles = [role._id];
     }
 
-    await User.findByIdAndUpdate(req.params.id, user);
+    await User.findByIdAndUpdate(req.params.id, user); 
     res.status(200).json({ status:"User updated" });
   } catch (err) {
     res.status(500).send({ message: err.message });
