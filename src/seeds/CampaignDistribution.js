@@ -21,8 +21,8 @@ async function seedCampaignDistribution(randomSeed) {
       const campaignType = await CampaignType.findOne().skip(randomCampaignType);
       const isPost = faker.helpers.arrayElement([true, false])
       const initDate = faker.date.between(
-        '2022-01-01T00:00:00.000Z',
-        '2022-06-01T00:00:00.000Z'
+        '2022-08-01T00:00:00.000Z',
+        '2022-12-01T00:00:00.000Z'
       )
 
       const newCampaign = new Campaign({
@@ -40,6 +40,7 @@ async function seedCampaignDistribution(randomSeed) {
             faker.internet.url()
           ]
         ),
+        // crear modelos de estos campos
         destination: faker.helpers.arrayElement([
           'Tu perfil',
           'Tu sitio web',
