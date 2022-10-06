@@ -72,7 +72,9 @@ async function clientStadistic(req, res) {
       title: campaign.name,
       time: campaign.initDate,
       finalDate: campaign.finalDate,
-      campaignState: campaign.campaignState
+      campaignState: campaign.campaignState,
+      perDayBudget: campaign.perDayBudget,
+      promotionDuration: campaign.promotionDuration
     }))
     timeline.sort((a, b) => a.time - b.finalDate)
 
@@ -89,19 +91,21 @@ async function clientStadistic(req, res) {
 
     let campaignState = await groupStadisticQuery(clientId, "campaignState")
     campaignState = campaignState.map((el) => ({label: el._id, value: el.count}))
+    campaignState.sort((a, b) => b.value - a.value)
 
     let interestSegmentation = await groupStadisticQuery(clientId, "interestSegmentation")
     interestSegmentation = interestSegmentation.map((el) => ({label: el._id, value: el.count}))
 
     let isPost = await groupStadisticQuery(clientId, "isPost")
     let display = [
-      { label: 'isVideo', value: isPost[0].count },
-      { label: 'isPost', value: isPost[1].count },
+      { label: 'Video', value: isPost[0].count },
+      { label: 'Post', value: isPost[1].count },
     ]
 
     let campaignType = await groupStadisticQuery(clientId, "campaignType")
     campaignType = campaignType.map((el) => ({label: el._id.name, description: el._id.description,value: el.count}))
-
+    campaignType.sort((a, b) => b.value - a.value)
+    
     // re roll - campaignDistribution - projections
     // console.log(await groupStadisticQuery(clientId, "destination"))
 
