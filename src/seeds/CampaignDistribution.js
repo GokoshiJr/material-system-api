@@ -50,14 +50,14 @@ async function seedCampaignDistribution(randomSeed) {
         linkAPI: faker.internet.url(),
         ubication: faker.helpers.arrayElement([
           'Carabobo', 'Lara', 'Aragua', 'Miranda',
-          'Guarico', 'Distrito Capital'
+          'Guárico', 'Distrito Capital'
         ]),
         demographicsDataSegmentation: faker.helpers.arrayElement([
-          'Nivel de ingresos', 'Edad', 'Religion', 'Educacion'
+          'Nivel de ingresos', 'Edad', 'Religión', 'Educación'
         ]),
         interestSegmentation: faker.helpers.arrayElement([
           'Aficiones y Actividades', 'Comida y bebidas', 'Compras y Moda', 
-          'Deportes', 'Entretenimiento', 'Familia', 'Fitness', 'Negocios', 'Tecnologia'
+          'Deportes', 'Entretenimiento', 'Familia', 'Fitness', 'Negocios', 'Tecnología'
         ]),
         audienceAge: [
           Number(faker.finance.amount(13, 30, 0)),
