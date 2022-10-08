@@ -32,10 +32,6 @@ const ClientSchema = new Schema({
   socialPlatform: {
     type: String,
     required: true
-  },
-  associated: {
-    type: Boolean,
-    required: true
   }
 }, {
   timestamps: true,

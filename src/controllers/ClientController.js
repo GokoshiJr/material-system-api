@@ -156,7 +156,7 @@ async function store(req, res) {
       userAccount,
       password,
       socialPlatform,
-      associated
+      
     } = req.body;
     const client = new Client({
       name,
@@ -166,10 +166,10 @@ async function store(req, res) {
       userAccount,
       password: await Client.encryptPassword(password),
       socialPlatform,
-      associated
+      
     });
     await client.save();
-    res.json({ status: "Client created" });
+    res.json({ status: "Cliente creado con éxito" });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
@@ -186,7 +186,7 @@ async function update(req, res) {
       userAccount,
       password,
       socialPlatform,
-      associated
+      
     } = req.body;
     const updateClient = {
       name,
@@ -195,11 +195,11 @@ async function update(req, res) {
       phoneNumber,
       userAccount,
       socialPlatform,
-      associated
+      
     };
     if (password) updateClient.password = await Client.encryptPassword(password)
     await Client.findByIdAndUpdate(req.params.id, updateClient);
-    res.json({ status: "Client updated" });
+    res.json({ status: "Cliente actualizado con éxito" });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
@@ -209,7 +209,7 @@ async function update(req, res) {
 async function destroy(req, res) {
   try {
     await Client.findByIdAndRemove(req.params.id);
-    res.json({ status: "Client deleted" });
+    res.json({ status: "Cliente eliminado con éxito" });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
