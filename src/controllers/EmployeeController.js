@@ -94,7 +94,7 @@ async function update(req, res) {
       const foundUser = await User.findById(userId)
       updateEmployee.userId = foundUser._id
     }
-    if (birthDate) {
+    if (birthDate instanceof String) {
       updateEmployee.birthDate = new Date(birthDate)
     }
     const employee = await Employee.findByIdAndUpdate(req.params.id, updateEmployee);

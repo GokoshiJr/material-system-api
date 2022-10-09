@@ -48,8 +48,6 @@ async function mailer(from, to, subject, text, html) {
 // return all reports
 async function index(req, res) {
   try {
-
-    
     const reports = await Report.find();
     res.json(reports);
   } catch (err) {
@@ -78,39 +76,42 @@ async function store(req, res) {
       deposits,
       percentageCommission,
       promotedPostLink,
-      totalInvoiced
+      totalInvoiced,
+      check,
     } = req.body;
 
     const report = new Report({
       balance,
       campaignId,
       commission,
-      deposits,
+      deposits: deposits.map(el => el.value),
       percentageCommission,
       promotedPostLink,
       totalInvoiced
     });
 
     const newReport = await report.save();
-    
-    const html = `      
+
+    const html = `
       <h2>Campaña</h2>
         ID: ${campaignId}
-      <h2>Balance Actual</h2>
-        ${balance}$
-      <h2>Comisión</h2>
-       ${commission}
-      <h2>Porcentaje de la comisión</h2>
-        ${percentageCommission}%
-      <h2>Depositos realizados</h2>
-      <ul>
-        ${deposits.map(el => `<li>${el}$</li>`)}
-      </ul>
-      <h2>Inversión total</h2>
-        ${totalInvoiced}$
       <h2>Links de promoción</h2>
       <ul>
         ${promotedPostLink.map(el => `<li>${el}$</li>`)}
+      </ul>
+      <h2>Inversión total</h2>
+        ${totalInvoiced}$
+      <h2>Balance Actual</h2>
+        ${balance}$
+      <h2>Coste de la campaña</h2>
+        ${check}$
+      <h2>Porcentaje de la comisión</h2>
+        ${percentageCommission}%
+      <h2>Comisión</h2>
+       ${commission}
+      <h2>Depositos realizados</h2>
+      <ul>
+        ${deposits.map(el => `<li>${el.value}$ ID: ${el._id.slice(18, 24)}</li>`)}
       </ul>
       </br>
       <b>Reporte: ${newReport._id}</b>
