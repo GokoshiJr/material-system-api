@@ -26,7 +26,7 @@ async function seedProjection(randomSeed, numFake) {
           const newProjection = new Projection({
             link: faker.internet.url(),
             balances: faker.helpers.arrayElements(
-              [Math.floor(perDayBudget * promotionDuration)]
+              [{value: Math.floor(perDayBudget * promotionDuration), date: Date.now()}]
             ),
             campaignId: _idCampaign,
             clientId: _idClient
