@@ -7,7 +7,8 @@ const ProjectiontSchema = new Schema({
     required: true
   },
   balances: [{
-    type: Number
+    value: Number,
+    date: Date
   }],
   campaignId: {
     ref: "Campaign",
