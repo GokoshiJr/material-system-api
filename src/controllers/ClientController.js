@@ -164,7 +164,7 @@ async function store(req, res) {
       email,
       phoneNumber,
       userAccount,
-      password: await Client.encryptPassword(password),
+      password,
       socialPlatform
     });
 
@@ -203,10 +203,11 @@ async function update(req, res) {
       email,
       phoneNumber,
       userAccount,
-      socialPlatform
+      socialPlatform,
+      password
     };
 
-    if (password) updateClient.password = await Client.encryptPassword(password)
+    // if (password) updateClient.password = await Client.encryptPassword(password)
 
     await Client.findByIdAndUpdate(req.params.id, updateClient);
 

@@ -127,7 +127,37 @@ async function stadistics(req, res) {
         y: el.audienceAge[1]
       }
     ))
+    // contador - destination
+    const destination = await Campaign.aggregate([
+      {
+        $group: {
+          _id: '$destination',
+          count: { $sum: 1}
+        }
+      }
+    ])
+    let destinationArray = []
+    for (const element of destination) {
+      destinationArray.push({
+        value: element.count,
+        label: element._id
+      })
+    }
+    destinationArray.sort((a, b) => a.value - b.value)
 
+    
+    const ubication = await Campaign.aggregate([
+      { "$match": { "campaignState": 'on' } },
+      {
+        $group: {
+          _id: '$ubication',
+          count: { $sum: 1}
+        }
+      }
+    ])
+    ubication.sort((a, b) => b.count - a.count)
+
+    
     res.json({
       total,
       on,
@@ -135,7 +165,9 @@ async function stadistics(req, res) {
       finalized,
       campaignTypes,
       genderAudience,
-      ageAudienceTarget
+      ageAudienceTarget,
+      destinationArray,
+      ubication
     });
 
   } catch (err) {
@@ -208,8 +240,13 @@ async function store(req, res) {
       ubication
     });
     
-    await campaign.save();
-    res.json({ status: "Campaign created", icon: "success", title: "Campaña creada con éxito" });
+    const newCampaign = await campaign.save();
+    res.json({ 
+      status: "Campaign created", 
+      icon: "success", 
+      title: "Campaña creada con éxito",
+      id: newCampaign._id
+    });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
@@ -218,7 +255,6 @@ async function store(req, res) {
 // update campaign by id
 async function update(req, res) {
   try {
-    console.log(req.body)
 
     const {
       name,
