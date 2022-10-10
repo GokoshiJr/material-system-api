@@ -155,9 +155,9 @@ async function store(req, res) {
       phoneNumber,
       userAccount,
       password,
-      socialPlatform,
-      
+      socialPlatform
     } = req.body;
+
     const client = new Client({
       name,
       lastName,
@@ -165,13 +165,22 @@ async function store(req, res) {
       phoneNumber,
       userAccount,
       password: await Client.encryptPassword(password),
-      socialPlatform,
-      
+      socialPlatform
     });
+
     await client.save();
-    res.json({ status: "Cliente creado con éxito" });
+
+    res.json({ 
+      status: "Cliente creado con éxito", 
+      icon: "success", 
+      title: "Cliente creado con éxito" 
+    });
   } catch (err) {
-    res.status(500).send({ message: err.message });
+    res.status(500).send({ 
+      status: err.message, 
+      icon: "error", 
+      title: "Ocurrió un error al crear el cliente" 
+    });
   }
 }
 
@@ -185,23 +194,33 @@ async function update(req, res) {
       phoneNumber,
       userAccount,
       password,
-      socialPlatform,
-      
+      socialPlatform
     } = req.body;
+
     const updateClient = {
       name,
       lastName,
       email,
       phoneNumber,
       userAccount,
-      socialPlatform,
-      
+      socialPlatform
     };
+
     if (password) updateClient.password = await Client.encryptPassword(password)
+
     await Client.findByIdAndUpdate(req.params.id, updateClient);
-    res.json({ status: "Cliente actualizado con éxito" });
+
+    res.json({ 
+      status: "Cliente actualizado con éxito", 
+      icon: "success", 
+      title: "Cliente actualizado con éxito" 
+    });
   } catch (err) {
-    res.status(500).send({ message: err.message });
+    res.status(500).send({ 
+      status: err.message, 
+      icon: "error", 
+      title: "Ocurrió un error al actualizar el cliente" 
+    });
   }
 }
 
@@ -209,9 +228,17 @@ async function update(req, res) {
 async function destroy(req, res) {
   try {
     await Client.findByIdAndRemove(req.params.id);
-    res.json({ status: "Cliente eliminado con éxito" });
+    res.json({ 
+      status: "Client deleted", 
+      icon: "success", 
+      title: "Cliente eliminado con éxito" 
+    });
   } catch (err) {
-    res.status(500).send({ message: err.message });
+    res.status(500).send({ 
+      status: err.message, 
+      icon: "error", 
+      title: "Ocurrió un error al eliminar el cliente" 
+    });
   }
 }
 

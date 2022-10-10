@@ -158,7 +158,7 @@ async function index(req, res) {
 async function show(req, res) {
   try {
     const campaign = await Campaign.findById(req.params.id)
-    .populate({ path: 'campaignTypeId', select: '-_id name' });
+    .populate({ path: 'campaignTypeId', select: '_id name' });
     res.json(campaign);
   } catch (err) {
     res.status(500).send({ message: err.message });
@@ -209,7 +209,7 @@ async function store(req, res) {
     });
     
     await campaign.save();
-    res.json({ status: "Campaign created" });
+    res.json({ status: "Campaign created", icon: "success", title: "Campaña creada con éxito" });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
@@ -218,26 +218,57 @@ async function store(req, res) {
 // update campaign by id
 async function update(req, res) {
   try {
+    console.log(req.body)
+
     const {
+      name,
       isPost,
       isVideo,
-      campaignType,
+      campaignTypeId,
+      promotePostLink,
+      destination,
+      linkAPI,
+      ubication,
+      demographicsDataSegmentation,
+      interestSegmentation,
+      ageFloor,
+      ageTop,
+      audienceGender,
+      perDayBudget,
+      promotionDuration,
       initDate,
-      finalDate,
-      campaignState
+      finalDate
     } = req.body;
+
+    const audienceAge = [ageFloor, ageTop]
+
     const updateCampaign = {
+      name,
       isPost,
       isVideo,
-      campaignType,
-      campaignState
+      campaignTypeId,
+      promotePostLink,
+      destination,
+      linkAPI,
+      ubication,
+      demographicsDataSegmentation,
+      interestSegmentation,
+      audienceAge,
+      audienceGender,
+      perDayBudget,
+      promotionDuration,
+      initDate,
+      finalDate
     };
-    if (initDate) updateCampaign.initDate = new Date(initDate)
-    if (finalDate) updateCampaign.finalDate = new Date(finalDate)
+
+    if (initDate instanceof String) updateCampaign.initDate = new Date(initDate)
+    if (finalDate instanceof String) updateCampaign.finalDate = new Date(finalDate)
+
     await Campaign.findByIdAndUpdate(req.params.id, updateCampaign);
-    res.json({ status: "Campaign updated" });
+
+    res.json({ status: "Campaign updated", icon: "success", title: "Campaña actualizada con éxito" });
   } catch (err) {
-    res.status(500).send({ message: err.message });
+    res.status(500).send({ status: err.message, icon: "error", title: "Ocurrió un error al actualizar" });
   }
 }
 
@@ -245,9 +276,17 @@ async function update(req, res) {
 async function destroy(req, res) {
   try {
     await Campaign.findByIdAndRemove(req.params.id);
-    res.json({ status: "Campaign deleted" });
+    res.json({ 
+      status: "Campaign updated", 
+      icon: "success", 
+      title: "Campaña eliminada con éxito" 
+    });
   } catch (err) {
-    res.status(500).send({ message: err.message });
+    res.status(500).send({ 
+      status: err.message, 
+      icon: "error", 
+      title: "Ocurrió un error al eliminar la campaña" 
+    });
   }
 }
 

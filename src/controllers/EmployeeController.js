@@ -107,7 +107,7 @@ async function update(req, res) {
       employee.setImgUrl(filename);
       await Employee.findByIdAndUpdate(req.params.id, employee);
     }
-    res.json({ status: "Employee updated" });
+    res.json({ status: "Empleado actualizado con éxito" });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }

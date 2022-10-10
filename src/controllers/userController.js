@@ -47,7 +47,7 @@ async function createUserEmployee(req, res) {
 
     employee.save();
 
-    res.status(200).json({ status:"Empleado creado con exito" });
+    res.status(200).json({ status:"Empleado creado con éxito" });
   } catch (err) {
     console.log(err)
     res.status(500).send({ message: err.message });
