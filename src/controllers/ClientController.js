@@ -67,6 +67,7 @@ async function clientStadistic(req, res) {
 
     // campaign timeline
     let timeline = await campaignTimeline(clientId);
+    
     timeline = timeline.map(({ campaign }) => ({ 
       id: campaign._id,
       title: campaign.name,
@@ -97,6 +98,19 @@ async function clientStadistic(req, res) {
     interestSegmentation = interestSegmentation.map((el) => ({label: el._id, value: el.count}))
 
     let isPost = await groupStadisticQuery(clientId, "isPost")
+    
+    if (isPost.length === 1) {
+      isPost = [
+        { count: isPost[0].count }, 
+        { count: 0 }
+      ]
+    }
+    if (isPost.length === 0) {
+      isPost = [
+        { count: 0 }, 
+        { count: 0 }
+      ]
+    }
     let display = [
       { label: 'Video', value: isPost[0].count },
       { label: 'Post', value: isPost[1].count },
@@ -121,6 +135,7 @@ async function clientStadistic(req, res) {
     });
 
   } catch (err) {
+    console.log(err)
     res.status(500).send({ message: err.message });
   }
 }
