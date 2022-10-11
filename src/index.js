@@ -22,7 +22,7 @@ app.use(cors()); // para que responda peticiones desde otros hosts
 
 // routes
 app.use('/api/auth', require('./routes/Auth'));
-app.use('/api/user', require('./routes/User'));
+app.use('/api/user', require('./routes/user'));
 app.use('/api/employee', require('./routes/Employee'));
 app.use('/api/client', require('./routes/Client'));
 app.use('/api/campaign', require('./routes/Campaign'));
