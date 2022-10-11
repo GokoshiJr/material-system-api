@@ -10,7 +10,7 @@ const {
   store,
   update,
   destroy
-} = require('../controllers/UserController');
+} = require('../controllers/userController');
 
 // create user and employee
 router.post('/createUserEmployee', [verifyToken, isAdmin], createUserEmployee);
