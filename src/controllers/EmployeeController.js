@@ -75,6 +75,7 @@ async function store(req, res) {
 async function update(req, res) {
   try {
     const {
+      email,
       name,
       lastName,
       birthDate,
@@ -82,6 +83,10 @@ async function update(req, res) {
       phoneNumber,
       userId
     } = req.body;
+
+    const auxEmployee = await Employee.findById(req.params.id)
+    await User.findByIdAndUpdate(auxEmployee.userId, { email: email })
+    
     const updateEmployee = {
       name,
       lastName,
@@ -90,6 +95,8 @@ async function update(req, res) {
       phoneNumber,
       userId
     };
+
+
     if (userId) {
       const foundUser = await User.findById(userId)
       updateEmployee.userId = foundUser._id
