@@ -11,6 +11,7 @@ async function getCampaignUnasigned(req, res) {
       .populate('campaignId')
       .select('-_id campaignId')
     // id de las campañas en la proyeccion
+
     const campaignsInProjection = projections.map((el) => String(el.campaignId._id))    
 
     // todas las campañas
@@ -311,6 +312,7 @@ async function update(req, res) {
 // delete campaign by id
 async function destroy(req, res) {
   try {
+    await Projection.deleteOne({ campaignId: req.params.id });
     await Campaign.findByIdAndRemove(req.params.id);
     res.json({ 
       status: "Campaign updated", 

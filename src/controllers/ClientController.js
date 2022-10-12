@@ -243,6 +243,7 @@ async function update(req, res) {
 // delete client by id
 async function destroy(req, res) {
   try {
+    // todo delete client projections
     await Client.findByIdAndRemove(req.params.id);
     res.json({ 
       status: "Client deleted", 
