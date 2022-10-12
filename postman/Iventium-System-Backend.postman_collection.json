@@ -243,7 +243,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{   \r\n    \"email\":\"andres@gmail.com\",\r\n    \"password\":\"password\",\r\n    \"roles\": [\"admin\"]        \r\n}",
+							"raw": "{   \r\n    \"email\": \"marcel@gmail.com\",\r\n    \"password\": \"password\",\r\n    \"roles\": [\"admin\"]        \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -278,7 +278,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"andres@gmail.com\",\r\n    \"password\": \"password\"\r\n    \r\n}",
+							"raw": "{\r\n    \"email\": \"julio@gmail.com\",\r\n    \"password\": \"password\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -320,7 +320,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\r\n    \"name\": \"Marcel\",\r\n    \"lastName\": \"Gonzalez\",\r\n    \"socialId\": \"2000000\",\r\n    \"phoneNumber\":\"+58 000 000 0000\",\r\n    \"userId\": \"630647404bd864f14f5071ac\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -352,14 +352,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/api/user/62dd8aeb0e953571cf70eb2a",
+							"raw": "{{host}}/api/user/62ed932c2a00a53b144cb046",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"user",
-								"62dd8aeb0e953571cf70eb2a"
+								"62ed932c2a00a53b144cb046"
 							]
 						}
 					},
@@ -378,7 +378,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"Profe Rosa\",\r\n    \"email\": \"rosa@gmail.com\",\r\n    \"password\": \"password\",\r\n    \"social_id\": 9447210,\r\n    \"phone_number\": \"04244441440\",\r\n    \"direction\": \"Valencia\"    \r\n}",
+							"raw": "{    \r\n    \"email\": \"rosa@gmail.com\",\r\n    \"password\": \"password\",\r\n    \"roles\": [\"user\"]       \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -411,7 +411,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{    \r\n    \"roles\": [\"moderator\", \"admin\"]\r\n}",
+							"raw": "{    \r\n    \"accessState\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -419,13 +419,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/user/626ef8468de1e56446aed476",
+							"raw": "{{host}}/api/user/633c48c9795019685c534f12",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
+								"api",
 								"user",
-								"626ef8468de1e56446aed476"
+								"633c48c9795019685c534f12"
 							]
 						}
 					},
@@ -540,7 +541,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"andres\",\r\n    \"lastName\": \"gonzalez\",\r\n    \"socialId\": \"1234\",\r\n    \"phoneNumber\":\"1234\",\r\n    \"userId\": \"62dd8aeb0e953571cf70eb2a\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Marcel\",\r\n    \"lastName\": \"Gonzalez\",\r\n    \"socialId\": \"27000000\",\r\n    \"phoneNumber\":\"+584240000000\",\r\n    \"userId\": \"63424cd087a4dd79124af116\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -952,6 +953,39 @@
 					"response": []
 				},
 				{
+					"name": "Client campaigns",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/campaign/clientCampaigns/630d11624bfa017308e1817b",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"campaign",
+								"clientCampaigns",
+								"630d11624bfa017308e1817b"
+							],
+							"query": [
+								{
+									"key": "x-access-token",
+									"value": "{{token}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get campaign by id",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -1017,6 +1051,31 @@
 								"api",
 								"campaign",
 								"62def0cd0c403eee8f0f285c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unasigned campaigns",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/campaign/unasigned",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"campaign",
+								"unasigned"
 							]
 						}
 					},
@@ -1300,6 +1359,44 @@
 								"api",
 								"report",
 								"62e18c9c05f47e24a1e2f963"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Seeder",
+			"item": [
+				{
+					"name": "Seed",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-access-token",
+								"value": "{{token}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"seed\": 4753,\r\n    \"campaignDistribution\": 0,\r\n    \"userEmployee\": 0,\r\n    \"client\": 0,\r\n    \"campaign\": 0,\r\n    \"projection\": 0,\r\n    \"report\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/seed",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"seed"
 							]
 						}
 					},
